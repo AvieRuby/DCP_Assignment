@@ -3,7 +3,10 @@
 
 using namespace std;
 
-// Creates a node class
+int c;                                                                      // Global variable CHOICE
+
+
+// Created a node class
 class Node 
     {
         public:
@@ -12,6 +15,7 @@ class Node
             Node *nextName , *nextAge;         // Declare Node pointer variables
     };
 
+// Created a pushList class
 class pushList
     {
         public:
@@ -70,22 +74,22 @@ class pushList
                 last->nextAge = new_node;  
                 return;  
             }
-    };
 
-// This function prints contents of linked list starting from the given node
-void printList(Node* n , Node* m)
-    {
-        while (n != NULL) 
-            {             
-                cout << "| ";                           // Loop to print data in order 
-                cout.width(20);
-                cout << left << n->name << "| ";
-                cout.width(5);
-                cout << m->age << "|" << endl;
-                n = n->nextName;
-                m = m->nextAge;
+        // This function prints contents of linked list starting from the given node
+        void printList(Node* n , Node* m)
+            {
+                while (n != NULL) 
+                    {             
+                        cout << "| ";                           // Loop to print data in order 
+                        cout.width(20);
+                        cout << left << n->name << "| ";
+                        cout.width(5);
+                        cout << m->age << "|" << endl;
+                        n = n->nextName;
+                        m = m->nextAge;
+                    }
             }
-    }
+    };
 
 // Created a getInfo class
 class getInfo
@@ -95,49 +99,133 @@ class getInfo
             int y;
             Node *headName = NULL , *headAge = NULL;    // Declare pointer variables for name and age    
             pushList input;                              // Call class getData ***Can probably do friend class***
+            friend class printing;
 
-        public:        
+        public:   
             // Function to get input 
-            string setNameAge()   
-                {
-                    cout << "---------------------------------\n";                // Intoduction
-                    cout << "|\tMMU Student's Data\t|\n";
-                    cout << "---------------------------------\n";                
-                    cout << "Input Names and Age (0 to end)\n";    
-                    while ( x != "0")                                           // Keeps asking for input while name isnt 0
-                    {
+            void setNameAge()   
+                {            
                         cout << "\nInput Name: ";
                         cin >> x;                                               // User input name
-                            {                    
-                                if (x != "0")
-                                    {
-                                        input.pushName(&headName, x);           // Send name into link list
+                        input.pushName(&headName, x);                           // Send name into link list
 
-                                        cout << "Input Age : ";
-                                        cin >> y;                               // User input age
+                        cout << "Input Age : ";
+                        cin >> y;                                               // User input age
 
-                                        input.pushAge(&headAge, y);             // Send age into link list
-                                    }
-                            }
-                        cout << "\nCurrent List\n";                             // Print current list
-                        cout << "------------------------------\n";
-                        printList(headName , headAge);
-                        cout << "------------------------------\n";
-                    }
-
-                    return x;
+                        input.pushAge(&headAge, y);                             // Send age into link list
+                        
+                        printCurrent();                                         // Prints current list
                 }
+            
+            void printCurrent()
+                {                        
+                    cout << "\nCurrent List\n";                                 // Print current list
+                    cout << "------------------------------\n";
+                    input.printList(headName , headAge);
+                    cout << "------------------------------\n";
+                }
+        };
+
+// Created a delete class
+class Delete
+    {
+        private:
+        pushList Input;
+        
+        public:
+        // Fucntion to delete node
+        void deleteNode(Node*& tail , Node*& head , string deleted)     
+            {
+                if (head == NULL)                                               // Check if link list is empty
+                    {
+                        cout << "The list is empty\n";
+                        return;
+                    }
+                
+                if (head->name == deleted)                                      // Deletes the link list if input value is correct
+                    {
+                        Node* t = head;
+                        head = head->nextName;
+                        tail = tail->nextAge;
+
+                        delete(t);
+                        return;
+                    }
+                deleteNode(tail->nextAge , head->nextName , deleted);           // Repeat until all same values are deleted
+            }
 
     };
 
 
+
+// Created a printing class
+class printing
+    {
+        friend class getInfo;
+        private:
+        getInfo info;
+        Delete kill;
+
+        public:
+        void intro()
+            {
+                cout << "---------------------------------\n";                // Print intoduction
+                cout << "|\tMMU Student's Data\t|\n";
+                cout << "---------------------------------\n";   
+            }
+
+        int choice()
+            {
+
+                cout << "What would you like to do?\n";                         // Print choices
+                cout << "[1] Add student details into the database\n";
+                cout << "[2] Delete student details from the database\n";
+                cout << "[0] End Program\n";
+                cout << "Choice :";
+
+                cin >> c;
+                return c;
+
+            }  
+
+        // Function to get choice
+        void getChoice()
+            {
+                string deletedPerson;
+
+                if(c == 1)                                                          // Executes set name and age function if 1
+                    {
+                        info.setNameAge();
+                        choice();
+                    }
+                if(c == 2)                                                          // Executes delete function if 2
+                    {
+                        cout << "\nWho do you want to delete : ";
+                        cin >> deletedPerson;
+                        kill.deleteNode(info.headAge , info.headName , deletedPerson);
+                        info.printCurrent();
+                        choice();
+                    }
+                                
+            }
+    };
+
+
+
 int main()
     {
+        printing print; 
         getInfo info;                               // Declare class getInfo variable
         Node *headName , *headAge;                  // Declare class Node variables
 
-        info.setNameAge();                          // Gets user input name / age, prints current list
-        
+        print.intro();                              // Prints intro
+        print.choice();                             // Prints choices
+        do
+            {
+                print.getChoice();                  // Loops to get info and choices / prints output
+            } while (c != 0);
+
+        cout << "Program Ended";
 
         return 0;
     }

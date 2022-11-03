@@ -3,16 +3,44 @@
 
 using namespace std;
 
-// Creates a node class
+// Created a printing class
+class printing
+    {
+        private:
+        friend class getInfo;
+        int c;
+
+        public:
+        void intro()
+            {
+                cout << "---------------------------------\n";                // Print intoduction
+                cout << "|\tMMU Student's Data\t|\n";
+                cout << "---------------------------------\n";   
+            }
+
+        int choice()
+            {
+
+                cout << "What would you like to do?\n";                         // Print choices
+                cout << "[1] Add student details into the database\n";
+                cout << "[2] Delete student details from the database\n";
+
+                cin >> c;
+                return c;
+
+            }  
+    };
+
+// Created a node class
 class Node 
     {
         public:
             string name;                       // Declare string variable name
             int age;                           // Declare int variable age
             Node *nextName , *nextAge;         // Declare Node pointer variables
-
     };
 
+// Created a pushList class
 class pushList
     {
         public:
@@ -71,32 +99,89 @@ class pushList
                 last->nextAge = new_node;  
                 return;  
             }
+
+        // This function prints contents of linked list starting from the given node
+        void printList(Node* n , Node* m)
+            {
+                while (n != NULL) 
+                    {             
+                        cout << "| ";                           // Loop to print data in order 
+                        cout.width(20);
+                        cout << left << n->name << "| ";
+                        cout.width(5);
+                        cout << m->age << "|" << endl;
+                        n = n->nextName;
+                        m = m->nextAge;
+                    }
+            }
     };
 
+// Created a Delete class
 class Delete
     {
-        void deleteNode(Node*& head , string deleted)
+        public:
+        // Created struct for remove node
+        struct Node
             {
-                if (head == NULL)
+                string data;
+                Node *link = NULL;
+                Node() {}
+                Node(string a) : data(a) {}
+            };
+        
+
+        void deleteNode(Node*&head , string name)
+            {
+                if(head == NULL)
                     {
-                        cout << "The list is empty\n";
+                        cout << "List is empty";
                         return;
                     }
-                
-                if (head->name == deleted)
+                if(head->data == name)
                     {
-                        Node* t = head;
-                        head = head->nextName;
-                        delete(t);
+                        Node *t = head;
+                        head = head->link;
+
+                        delete (t);
                         return;
                     }
-                deleteNode(head->nextName , deleted);     
+
+
+                deleteNode(head->link , name);
             }
 
+        void pushDeleted(Node*& head, string data)
+            {
+                Node *newNode = new Node(data);
+                newNode->link = head;
+                head = newNode;
+            }
 
+        void printDelete(Node* head , Node* n , Node* m)
+            {
+                while (n != NULL) 
+                    {             
+                        cout << "| ";                           // Loop to print data in order 
+                        cout.width(20);
+                        cout << left << n->name << "| ";
+                        cout.width(5);
+                        cout << m->age << "|" << endl;
+                        n = n->nextName;
+                        m = m->nextAge;
+                    }
+            }
 
+        //Function to choose which data to delete
+        void chooseDelete(Node* head)
+            {
+                string deletion;
+
+                cout << "Please enter name you would like to delete: ";
+                cin >> deletion;
+
+                deleteNode(head , deletion);
+            }
     };
-
 
 
 // Created a getInfo class
@@ -107,15 +192,29 @@ class getInfo
             int y;
             Node *headName = NULL , *headAge = NULL;    // Declare pointer variables for name and age    
             pushList input;                              // Call class getData ***Can probably do friend class***
+            printing p;
+            Delete D;
 
-        public:        
-            // Function to get input 
-            string setNameAge()   
+        public:
+            // Function to get choice
+            void getChoice(int z)
                 {
-                    cout << "---------------------------------\n";                // Intoduction
-                    cout << "|\tMMU Student's Data\t|\n";
-                    cout << "---------------------------------\n";                
-                    cout << "Input Names and Age (0 to end)\n";    
+                    if(z == 1)
+                        {
+                            setNameAge();
+                        }
+                    if(z == 2)
+                        {
+                            D.chooseDelete(headName);
+                        }
+                                 
+                }
+     
+            // Function to get input 
+            void setNameAge()   
+                {           
+
+                    cout << "Input Names and Age\n";    
                     while ( x != "0")                                           // Keeps asking for input while name isnt 0
                     {
                         cout << "\nInput Name: ";
@@ -132,24 +231,28 @@ class getInfo
                                         
                                         cout << "\nCurrent List\n";                             // Print current list
                                         cout << "------------------------------\n";
-                                        printList(headName , headAge);
+                                        input.printList(headName , headAge);
                                         cout << "------------------------------\n";
                                     }
                             }
 
                     }
-
-                    return x;
                 }
+
+
 
     };
 
 
 int main()
     {
+        printing print; 
         getInfo info;                               // Declare class getInfo variable
         Node *headName , *headAge;                  // Declare class Node variables
 
+        print.intro();
+        print.choice();
+        info.getChoice(print.choice());
         info.setNameAge();                          // Gets user input name / age, prints current list
         
 
