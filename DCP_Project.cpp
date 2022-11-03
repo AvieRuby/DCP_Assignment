@@ -133,10 +133,10 @@ class getInfo
 
 int main()
     {
-        getInfo info;
-        Node *headName , *headAge;
+        getInfo info;                               // Declare class getInfo variable
+        Node *headName , *headAge;                  // Declare class Node variables
 
-        info.setNameAge();
+        info.setNameAge();                          // Gets user input name / age, prints current list
         
 
         return 0;
