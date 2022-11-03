@@ -177,11 +177,13 @@ class printing
         int choice()
             {
 
-                cout << "What would you like to do?\n";                         // Print choices
+                cout << "What would you like to do?\n";                             // Print choices   
+                cout << "[0] End Program\n";                  
                 cout << "[1] Add student details into the database\n";
                 cout << "[2] Delete student details from the database\n";
-                cout << "[0] End Program\n";
-                cout << "Choice :";
+                cout << "[3] Print current list\n";
+
+                cout << "\nChoice :";
 
                 cin >> c;
                 return c;
@@ -203,6 +205,11 @@ class printing
                         cout << "\nWho do you want to delete : ";
                         cin >> deletedPerson;
                         kill.deleteNode(info.headAge , info.headName , deletedPerson);
+                        info.printCurrent();
+                        choice();
+                    }
+                if(c == 3)
+                    {
                         info.printCurrent();
                         choice();
                     }
