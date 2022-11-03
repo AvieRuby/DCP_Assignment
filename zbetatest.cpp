@@ -76,7 +76,7 @@ void printList(Node* n , Node* m)
     {
         while (n != NULL) 
             {             
-                cout << "| " << n->name << "\t\t|\t" << n->age << " |" << endl;     // Loop to print data in order 
+                cout << "| " << n->name << "\t\t| " << m->age << " \t|" << endl;     // Loop to print data in order 
                 n = n->nextName;
                 m = m->nextAge;
             }
@@ -91,47 +91,39 @@ class getInfo
             Node *headName = NULL , *headAge = NULL;    // Declare pointer variables for name and age    
             getData input;                              // Call class getData ***Can probably do friend class***
 
-        public:
-
-            //Function to print intro
-            void printIntro()
-                {
-                    cout << "Sorting data\n";
-                    cout << "Input Names and Age (0 or next)\n";
-                }
-            
+        public:        
             // Function to get input 
-            void setNameAge()       
+            void setNameAge()   
                 {
-                    while ( x != "0")
+                    cout << "----------------------------------\n";                // Intoduction
+                    cout << "|\tMMU Student's Data\t|\n";
+                    cout << "----------------------------------\n";                
+                    cout << "Input Names and Age (0 to end)\n";    
+                    while ( x != "0")                                           // Keeps asking for input while name isnt 0
                     {
                         cout << "\nInput Name: ";
-                        cin >> x;
+                        cin >> x;                                               // User input name
                             {                    
                                 if (x != "0")
                                     {
-                                        input.pushName(&headName, x);
+                                        input.pushName(&headName, x);           // Send name into link list
 
-                                        cout << "Input Age: ";
-                                        cin >> y; 
+                                        cout << "Input Age : ";
+                                        cin >> y;                               // User input age
 
-                                        input.pushAge(&headAge, y);
+                                        input.pushAge(&headAge, y);             // Send age into link list
                                     }
                             }
-                        cout << "\nCurrent List\n";
-                        cout << "----------------------------\n";
+                        cout << "\nCurrent List\n";                             // Print current list
+                        cout << "------------------------\n";
                         printList(headName , headAge);
-                        cout << "----------------------------\n";
+                        cout << "------------------------\n";
                     }
 
 
                 }
 
     };
-  
-
-
-
 
 
 int main()
@@ -139,14 +131,10 @@ int main()
         getInfo info;
         Node *headName , *headAge;
 
-        info.printIntro();
         info.setNameAge();
         printList(headName , headAge);
         
 
-
-
-    
         return 0;
     }
   
