@@ -8,10 +8,10 @@ class Node {
     public:
     string name;
     int age;
-    Node *nextName , *nextAge;
+    Node *nextName = NULL, *nextAge = NULL;
 };
 
-// Class to perform link list insertion
+// Class to perform link list insertion / removal
 class insert {
     public:
     // Function to push name data into the linked list at the front
@@ -63,6 +63,32 @@ class insert {
         last->nextAge = newNode;
         return;
     }
+
+    // Function to print current database
+    void list(Node *node , Node *node2) {
+        if (node == NULL) {
+            cout << "\nCurrent Student Database\n";
+            cout << "---------------------------------\n";
+            cout << "|       DATABASE IS EMPTY       |\n";
+            cout << "---------------------------------\n";
+        }
+
+        else {
+            cout << "\nCurrent Student Database\n";
+            cout << "------------------------------\n";
+            while (node != NULL) {
+                cout << "| "; 
+                cout.width(20);
+                cout << left << node->name << "| ";
+                cout.width(5);
+                cout << node2->age << "|" << endl;
+                node = node->nextName;
+                node2 = node2->nextAge;
+            }
+            cout << "------------------------------\n";
+        }
+    }
+
 };
 
 // Class to perform search , find mix / max in link list
@@ -70,20 +96,34 @@ class utility {
     public:
     // Function to search if data is in the link list
     bool search(Node* head , string data) {
+        Node* current = head;
+        if (current == NULL) {
+            cout << "The Database Is Empty\n";
+        }
+        else {
+            if (current->name == data) {
+                    return true;
+                }
+            else {
+                return false;
+            }
+        }
 
     }
 };
 
-// Class for setting and returning data
+// Class for setting ,returning and editing data
 class Data {
     private:
     friend class print;
     Node node;
     insert insert;
-    Node *head = NULL , *head2 = NULL;
     int mainChoice , addRemoveChoice;
+    string deleted;
+    Node *head = NULL, *head2 = NULL;
 
     public:
+
     // Function to set main menu choice
     void setMainMenu() {
         cout << "Choice: ";
@@ -116,37 +156,77 @@ class Data {
         insert.pushEndAge(&head2 , node.age);
     }
 
-    // Function to print current database
-    void list(Node *node , Node *node2) {
-        if (node == NULL) {
-            cout << "\nCurrent List\n";
-            cout << "------------------------------\n";
-            cout << "|         LIST IS EMPTY       |\n";
-            cout << "------------------------------\n";
+    // Function to delete the front of the link list
+    void deleteTop() {
+        if (head == NULL) {
+            cout << "\nThe Database Is Empty\n";
         }
-
-        else {
-            cout << "\nViewing Current Database\n";
-            cout << "------------------------------\n";
-            while (node != NULL) {
-                cout << "| "; 
-                cout.width(20);
-                cout << left << node->name << "| ";
-                cout.width(5);
-                cout << node2->age << "|" << endl;
-                node = node->nextName;
-                node2 = node2->nextAge;
-            }
-            cout << "------------------------------\n";
+        if (head != NULL) {
+            head = head->nextName;
+            head2 = head2->nextAge;
+            cout << "\nStudent Removed Successfully\n";
         }
     }
 
+    // Function to delete from the bottom (Currently Not Working)
+/*     void deleteBottom(Node *&head , Node *&head2 ) {
+        if (head == NULL) {
+            head = NULL;
+        }
+        if (head->nextName == next) {
+            delete head;
+        }
+        while (head->next->next != NULL) {
+            head = head->nextName;
+
+            delete (head->nextName);
+            head->nextName = NULL;
+        }
+    } */
+        
+    // Function to set the name of the deleted student
+    void setDeleteName() {
+        if (head == NULL) {
+            cout << "The Database Is Empty";
+        }
+        else {
+            cout << "\nWhich student do you want to delete: \n";
+            cin >> deleted;
+
+            cout << "\nStudent Removed Successfully\n";
+            deleteNodeName(head , head2 , deleted);
+        }
+    }
+
+    // Function to delete node by inputing name
+    void deleteNodeName(Node*& head , Node*& head2 , string deleted) {
+            if(head == NULL)
+                {
+                    return;
+                }
+            if (head->name == deleted)   
+                {
+                    Node* t = head;
+                    Node * u = head2;
+                    head = head->nextName;
+                    head2 = head2->nextAge;
+
+                    delete(t);
+                    delete(u);
+                    return;
+                }
+            deleteNodeName(head->nextName , head2->nextAge , deleted); 
+        }
 };
+
 
 // Class to print information
 class print {
     private:
+    Node node;
     Data data;
+    insert insert;
+    utility utility;
 
     public:
     // Function to print header
@@ -158,11 +238,11 @@ class print {
 
     // Function to print the main menu
     void mainMenu() {
+        insert.list(data.head , data.head2);
         cout << "\n-------------";
         cout << "\n| MAIN MENU |\n";
         cout << "------------------------------------------------------\n";
-        cout << "[1] View Current Database\t\n";
-        cout << "[2] Add / Remove Students From Database\n";
+        cout << "[1] Add / Remove Students From Database\n";
         cout << "------------------------------------------------------\n";
         data.setMainMenu();
         optionsMainMenu();
@@ -171,16 +251,13 @@ class print {
     // Function to determind which menu to switch to from main
     void optionsMainMenu() {
         if (data.mainChoice == 1) {
-            data.list(data.head , data.head2);
-            mainMenu();
-        }
-        if (data.mainChoice == 2) {
             addRemoveMenu();
         }
     }
 
     // Function to print add / remove student menu
     void addRemoveMenu() {
+        insert.list(data.head , data.head2);
         cout << "\n-----------------";
         cout << "\n| DATABASE MENU |\n";
         cout << "------------------------------------------------------\n";
@@ -188,6 +265,8 @@ class print {
         cout << "[2] Add A Student To The Bottom Of The Database\n";
         cout << "[3] Remove A Student From The Top Of The Database\n";
         cout << "[4] Remove A Student From The Bottom Of The Database\n";
+        cout << "[5] Remove A Student From The Database By Name\n";
+        cout << "[6] Clear Entire Database\n";
         cout << "[0] Return Back To Main Menu\n";
         cout << "------------------------------------------------------\n";
         data.setAddRemoveMenu();
@@ -209,7 +288,28 @@ class print {
             cout << "\nStudent Added Successfully\n";
             addRemoveMenu();
         }
-    }
+        if (data.addRemoveChoice == 3) {
+            data.deleteTop();
+            addRemoveMenu();
+        }
+        if (data.addRemoveChoice == 4) {
+            // data.deleteBottom(data.head , data.head2);
+            cout << "\nCurrently broken\n";
+            addRemoveMenu();
+        }
+        if (data.addRemoveChoice == 5) {
+            data.setDeleteName();
+            addRemoveMenu();
+            }
+        if (data.addRemoveChoice == 6) {
+            utility.search(data.head , "Bryan")? cout << "Yes" : cout << "No";
+ ;
+            addRemoveMenu();
+            }
+        }
+
+
+
 };
 
 // Main Function
