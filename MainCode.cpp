@@ -108,7 +108,6 @@ class utility {
                 return false;
             }
         }
-
     }
 };
 
@@ -118,8 +117,8 @@ class Data {
     friend class print;
     Node node;
     insert insert;
-    int mainChoice , addRemoveChoice;
-    string deleted;
+    int mainChoice , addRemoveChoice , utilityChoice;
+    string deleted , searchStudent;
     Node *head = NULL, *head2 = NULL;
 
     public:
@@ -134,6 +133,17 @@ class Data {
     void setAddRemoveMenu() {
         cout << "Choice: ";
         cin >> addRemoveChoice;
+    }
+
+    void setUtilityMenu() {
+        cout << "Choice: ";
+        cin >> utilityChoice;
+    }
+
+    // Function to set search student data
+    void setSearch() {
+        cout << "Which student do you want to search: ";
+        cin >> searchStudent;
     }
 
     // Function to set Name Age at the front of link list
@@ -168,21 +178,21 @@ class Data {
         }
     }
 
-    // Function to delete from the bottom (Currently Not Working)
-/*     void deleteBottom(Node *&head , Node *&head2 ) {
+// Function to delete from the bottom (Currently Not Working)
+    void deleteBottom() {
         if (head == NULL) {
             head = NULL;
         }
-        if (head->nextName == next) {
+        if (head->nextName == NULL) {
             delete head;
         }
-        while (head->next->next != NULL) {
+        while (head->nextName->nextName != NULL) {
             head = head->nextName;
 
             delete (head->nextName);
             head->nextName = NULL;
         }
-    } */
+    }
         
     // Function to set the name of the deleted student
     void setDeleteName() {
@@ -217,6 +227,8 @@ class Data {
                 }
             deleteNodeName(head->nextName , head2->nextAge , deleted); 
         }
+
+
 };
 
 
@@ -243,6 +255,7 @@ class print {
         cout << "\n| MAIN MENU |\n";
         cout << "------------------------------------------------------\n";
         cout << "[1] Add / Remove Students From Database\n";
+        cout << "[2] Database Utilities ( Searching )\n";
         cout << "------------------------------------------------------\n";
         data.setMainMenu();
         optionsMainMenu();
@@ -252,6 +265,9 @@ class print {
     void optionsMainMenu() {
         if (data.mainChoice == 1) {
             addRemoveMenu();
+        }
+        if (data.mainChoice == 2) {
+            utilityMenu();
         }
     }
 
@@ -294,7 +310,7 @@ class print {
         }
         if (data.addRemoveChoice == 4) {
             // data.deleteBottom(data.head , data.head2);
-            cout << "\nCurrently broken\n";
+            data.deleteBottom();
             addRemoveMenu();
         }
         if (data.addRemoveChoice == 5) {
@@ -302,11 +318,32 @@ class print {
             addRemoveMenu();
             }
         if (data.addRemoveChoice == 6) {
-            utility.search(data.head , "Bryan")? cout << "Yes" : cout << "No";
- ;
-            addRemoveMenu();
             }
         }
+
+    void utilityMenu() {
+        cout << "\n-----------------";
+        cout << "\n|  UTILITY MENU  |\n";
+        cout << "------------------------------------------------------\n";
+        cout << "[1] Search For A Student In The Database\n";
+        cout << "------------------------------------------------------\n";
+        data.setUtilityMenu();
+        optionsUtilityMenu();
+
+
+        }
+
+    void optionsUtilityMenu () {
+        if (data.utilityChoice == 0) {
+            mainMenu();
+        }
+        if (data.utilityChoice == 1) {
+            data.setSearch();
+            utility.search(data.head , data.searchStudent)? cout << "The Student Is In The Database\n" : cout << "The Student Is Not In The Database\n";
+            utilityMenu();
+        } 
+    }
+
 
 
 
