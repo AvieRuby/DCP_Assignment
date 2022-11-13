@@ -1,0 +1,2 @@
+@line 142 || Function to delete from the bottom
+Deletion is working but deleting an empty node will cause segmentation error
