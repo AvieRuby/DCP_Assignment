@@ -1,6 +1,4 @@
 Deletion of last node is working but deleting an empty node will cause segmentation error
 
-Remove student by name will print "Student Removed Successfully" Even if no student of the removed name exists
-
 Searching for oldest or youngest student will only print bottom one if more than one person of the same age exists in the database
 Also have issue with printing an empty database

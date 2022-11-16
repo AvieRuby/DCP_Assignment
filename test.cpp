@@ -28,19 +28,18 @@ class print {
     void mainMenu() {
         cout << "\n-------------";
         cout << "\n| MAIN MENU |\n";
-        cout << "--------------------------------------------------------------------------------\n";
-        cout << "[1] Add / Remove Students From Database\n";
-        cout << "[2] Search Students From Database\n";
-        cout << "[3] Print Current Database\n";
-        cout << endl;
-        cout << "[99] |TOGGLE DEBUG MODE| " ;
+        cout << "--------------------------------------------------------------------------\n";
+        cout << "[1] Change When Database Is Shown | " ;
         if (showList % 2 == 0) {
-            cout << "OFF : NOT SHOWING DATABASE\n";
+            cout << "Not Showing Database\n";
         }
         if (showList % 2 != 0) {
-            cout << "ON : SHOWING DATABASE\n";
+            cout << "Showing Database After Every Change\n";
         }
-        cout << "--------------------------------------------------------------------------------\n";
+        cout << "[2] Add / Remove Students From Database\n";
+        cout << "[3] Search Students From Database\n";
+        cout << "[4] Print Current Database\n";
+        cout << "--------------------------------------------------------------------------\n";
     }
 
     // Function to print add / remove student menu
@@ -378,19 +377,15 @@ class menu {
                 mainMenu();
             }
         if (!cin.fail()) {
-            if (choice == 99) {
+            if (choice == 1) {
                 function.showDatabase();
                 mainMenu();
             }
-            if (choice == 1) {
+            if (choice == 2) {
                 addRemove();
             }
-            if (choice == 2) {
-                search();
-            }
             if (choice == 3) {
-                function.list(function.head , function.head2);
-                mainMenu();
+                search();
             }
             else {
                 cout << "\nPlease Enter A Valid Choice\n";
@@ -438,18 +433,12 @@ class menu {
             }
             if (choice == 5) {
                 string deleted;
-                if (function.head == NULL) {
-                    cout << "\nThe Database Is Empty\n";
-                    addRemove();
-                }
-                else {
-                    cout << "\nWhich Student Do You Want To Delete: \n";
-                    cin >> deleted;
+                cout << "\nWhich Student Do You Want To Delete: \n";
+                cin >> deleted;
 
-                    cout << "\nStudent Removed Successfully\n";
-                    function.deleteNodeName(function.head , function.head2 , deleted);
-                    addRemove();
-                }
+                cout << "\nStudent Removed Successfully\n";
+                function.deleteNodeName(function.head , function.head2 , deleted);
+                addRemove();
             }
             if (choice == 6) {
                 function.deleteList(function.head , function.head2);
@@ -467,9 +456,7 @@ class menu {
     // Function for search Menu, -> 0 = Main Menu
     void search() {
         int choice;
-        if(showList % 2 != 0) {
-            function.list(function.head , function.head2);
-        }
+        function.list(function.head , function.head2);
         print.searchMenu();
         cout << "Choice: ";
         cin >> choice;
@@ -485,39 +472,20 @@ class menu {
                 mainMenu();
             }
             if (choice == 1) {
-                string searched;
-                if (function.head == NULL) {
-                    cout << "\nThe Database Is Empty\n";
-                    search();
-                }
-                else {
+                string deleted;
                 cout << "\nWho Do You Want To Search By Name? :";
-                cin >> searched;
-                function.search(function.head , function.head2 , searched)
-                ? cout << "\nThe Student " << searched << " Is In The Database\n" : cout << "\nThe Student " << searched <<"\n Is Not In The Database\n";
+                cin >> deleted;
+                function.search(function.head , function.head2 , deleted)
+                ? cout << "\nThe Student " << deleted << " Is In The Database\n" : cout << "\nThe Student " << deleted <<"\n Is Not In The Database\n";
                 search();
-                }
             }
             if (choice == 2) {
-                if (function.head == NULL) {
-                    cout << "\nThe Database Is Empty\n";
-                    search();
-                }
-                else {
                 cout << "\nThe Youngest Student Is " << function.minName(function.head2 , function.head) << " at " << function.minAge(function.head2) << " Years Old\n";
                 search();
-                }
             }
             if (choice == 3) {
-                if (function.head == NULL) {
-                    cout << "\nThe Database Is Empty\n";
-                    search();
-                }
-                else {
                 cout << "\nThe Oldest Student Is " << function.maxName(function.head2 , function.head) << " at " << function.maxAge(function.head2) << " Years Old\n";
                 search();
-            
-            }
             }
         }
         }
