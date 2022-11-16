@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <limits>
 
 using namespace std;
 
@@ -349,15 +350,25 @@ class menu {
         print.mainMenu();
         cout << "Choice: ";
         cin >> choice;
-        if (choice == 1) {
-            addRemove();
+        while(1) {
+            if(cin.fail()) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(),'\n');
+                cout << "\nPlease Enter A Valid Choice\n";
+                mainMenu();
+            }
+        if (!cin.fail()) {
+            if (choice == 1) {
+                addRemove();
+            }
+            if (choice == 2) {
+                search();
+            }
+            else {
+                cout << "\nPlease Enter A Valid Choice\n";
+                mainMenu();
+            }
         }
-        if (choice == 2) {
-            search();
-        }
-        else {
-            cout << "\nPlease enter a valid choice\n";
-            mainMenu();
         }
     }
 
@@ -368,41 +379,52 @@ class menu {
         print.addRemoveMenu();
         cout << "Choice: ";
         cin >> choice;
-        if (choice == 0) {
-            mainMenu();
-        }
-        if (choice == 1) {
-            function.setNameAgeFront();
-            addRemove();
-        }
-        if (choice == 2) {
-            function.setNameAgeEnd();
-            addRemove();
-        }
-        if (choice == 3) {
-            function.deleteTop();
-            addRemove();
-        }
-        if (choice == 4) {
-            function.deleteBottom(function.head , function.head2);
-            addRemove();
-        }
-        if (choice == 5) {
-            string deleted;
-            cout << "\nWhich student do you want to delete: \n";
-            cin >> deleted;
+        while(1) {
+            if(cin.fail()) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(),'\n');
+                cout << "\nPlease Enter A Valid Choice\n";
+                mainMenu();
+            }
+        if (!cin.fail()) {
+            if (choice == 0) {
+                mainMenu();
+            }
+            if (choice == 1) {
+                function.setNameAgeFront();
+                addRemove();
+            }
+            if (choice == 2) {
+                function.setNameAgeEnd();
+                addRemove();
+            }
+            if (choice == 3) {
+                function.deleteTop();
+                addRemove();
+            }
+            if (choice == 4) {
+                function.deleteBottom(function.head , function.head2);
+                addRemove();
+            }
+            if (choice == 5) {
+                string deleted;
+                cout << "\nWhich Student Do You Want To Delete: \n";
+                cin >> deleted;
 
-            cout << "\nStudent Removed Successfully\n";
-            function.deleteNodeName(function.head , function.head2 , deleted);
-            addRemove();
+                cout << "\nStudent Removed Successfully\n";
+                function.deleteNodeName(function.head , function.head2 , deleted);
+                addRemove();
+            }
+            if (choice == 6) {
+                function.deleteList(function.head , function.head2);
+                cout << "\nThe Database Has Been Cleared.\n";
+                addRemove();
+            }
+            else {
+                cout << "\nPlease Enter A Valid Choice\n";
+                addRemove();
+            }
         }
-        if (choice == 6) {
-            function.deleteList(function.head , function.head2);
-            addRemove();
-        }
-        else {
-            cout << "\nPlease enter a valid choice\n";
-            addRemove();
         }
     }
 
@@ -413,22 +435,31 @@ class menu {
         print.searchMenu();
         cout << "Choice: ";
         cin >> choice;
-
-        if (choice == 1) {
-            string deleted;
-            cout << "\nWho Do You Want To Search By Name? :";
-            cin >> deleted;
-            function.search(function.head , function.head2 , deleted)
-            ? cout << "\nThe Student " << deleted << " Is In The Database\n" : cout << "\nThe Student " << deleted <<"\n Is Not In The Database\n";
-            search();
+        while(1) {
+            if(cin.fail()) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(),'\n');
+                cout << "\nPlease Enter A Valid Choice\n";
+                mainMenu();
+            }
+        if (!cin.fail()) {
+            if (choice == 1) {
+                string deleted;
+                cout << "\nWho Do You Want To Search By Name? :";
+                cin >> deleted;
+                function.search(function.head , function.head2 , deleted)
+                ? cout << "\nThe Student " << deleted << " Is In The Database\n" : cout << "\nThe Student " << deleted <<"\n Is Not In The Database\n";
+                search();
+            }
+            if (choice == 2) {
+                cout << "\nThe Youngest Student Is " << function.minName(function.head2 , function.head) << " at " << function.minAge(function.head2) << " Years Old\n";
+                search();
+            }
+            if (choice == 3) {
+                cout << "\nThe Oldest Student Is " << function.maxName(function.head2 , function.head) << " at " << function.maxAge(function.head2) << " Years Old\n";
+                search();
+            }
         }
-        if (choice == 2) {
-            cout << "\nThe Youngest Student Is " << function.minName(function.head2 , function.head) << " at " << function.minAge(function.head2) << " Years Old\n";
-            search();
-        }
-        if (choice == 3) {
-            cout << "\nThe Oldest Student Is " << function.maxName(function.head2 , function.head) << " at " << function.maxAge(function.head2) << " Years Old\n";
-            search();
         }
     }
 };
