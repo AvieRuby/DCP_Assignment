@@ -31,7 +31,7 @@ class print {
         cout << "--------------------------------------------------------------------------------\n";
         cout << "[1] Add / Remove Students From Database\n";
         cout << "[2] Search Students From Database\n";
-        cout << "[3] Print Current Database\n";
+        cout << "[0] Print Current Database\n";
         cout << endl;
         cout << "[99] |TOGGLE DEBUG MODE| " ;
         if (showList % 2 == 0) {
@@ -175,6 +175,7 @@ class function {
     void deleteBottom(Node*& head , Node *& head2) {
         Node *t = head;
         Node *u = head2;
+        
         if (t == NULL) {
             cout << "\nThe Database Is Empty\n";
             t = NULL;
@@ -382,15 +383,15 @@ class menu {
                 function.showDatabase();
                 mainMenu();
             }
+            if (choice == 0) {
+                function.list(function.head , function.head2);
+                mainMenu();
+            }
             if (choice == 1) {
                 addRemove();
             }
             if (choice == 2) {
                 search();
-            }
-            if (choice == 3) {
-                function.list(function.head , function.head2);
-                mainMenu();
             }
             else {
                 cout << "\nPlease Enter A Valid Choice\n";
@@ -494,7 +495,7 @@ class menu {
                 cout << "\nWho Do You Want To Search By Name? :";
                 cin >> searched;
                 function.search(function.head , function.head2 , searched)
-                ? cout << "\nThe Student " << searched << " Is In The Database\n" : cout << "\nThe Student " << searched <<"\n Is Not In The Database\n";
+                ? cout << "\nThe Student " << searched << " Is In The Database\n" : cout << "\nThe Student " << searched <<" Is Not In The Database\n";
                 search();
                 }
             }
@@ -516,7 +517,6 @@ class menu {
                 else {
                 cout << "\nThe Oldest Student Is " << function.maxName(function.head2 , function.head) << " at " << function.maxAge(function.head2) << " Years Old\n";
                 search();
-            
             }
             }
         }
@@ -533,7 +533,5 @@ int main() {
 
     print.header();
     menu.mainMenu();
-
-
 
 }

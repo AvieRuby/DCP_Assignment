@@ -11,11 +11,11 @@ class Node {
     public:
     string name;
     int age;
-    Node *nextName = NULL, *nextAge = NULL;
+    Node *next;
 };
 
 // Class to print
-class print {
+class linkedList {
     public:
     // Function to print header
     void header() {
@@ -28,18 +28,19 @@ class print {
     void mainMenu() {
         cout << "\n-------------";
         cout << "\n| MAIN MENU |\n";
-        cout << "--------------------------------------------------------------------------\n";
-        cout << "[1] Change When Database Is Shown | " ;
+        cout << "--------------------------------------------------------------------------------\n";
+        cout << "[1] Add / Remove Students From Database\n";
+        cout << "[2] Search Students From Database\n";
+        cout << "[0] Print Current Database\n";
+        cout << endl;
+        cout << "[99] |TOGGLE DEBUG MODE| " ;
         if (showList % 2 == 0) {
-            cout << "Not Showing Database\n";
+            cout << "OFF : NOT SHOWING DATABASE\n";
         }
         if (showList % 2 != 0) {
-            cout << "Showing Database After Every Change\n";
+            cout << "ON : SHOWING DATABASE\n";
         }
-        cout << "[2] Add / Remove Students From Database\n";
-        cout << "[3] Search Students From Database\n";
-        cout << "[4] Print Current Database\n";
-        cout << "--------------------------------------------------------------------------\n";
+        cout << "--------------------------------------------------------------------------------\n";
     }
 
     // Function to print add / remove student menu
@@ -77,7 +78,6 @@ class function {
     Node node;
     Node *head = NULL, *head2 = NULL;
     Node *ptr;
-    Node *next = NULL;
     friend class menu;
 
     public:
@@ -353,6 +353,7 @@ class function {
             cout << "---------------------------------\n";
         }
     }
+
 };
 
 // Class menu to dictate where to go
@@ -377,15 +378,24 @@ class menu {
                 mainMenu();
             }
         if (!cin.fail()) {
-            if (choice == 1) {
+            if (choice == 99) {
                 function.showDatabase();
                 mainMenu();
             }
-            if (choice == 2) {
+            if (choice == 0) {
+                function.list(function.head , function.head2);
+                mainMenu();
+            }
+            if (choice == 1) {
                 addRemove();
             }
-            if (choice == 3) {
+            if (choice == 2) {
                 search();
+            }
+            if (choice == 3) {
+                function.sort(function.head2);
+                function.list(function.head , function.head2);
+                mainMenu();
             }
             else {
                 cout << "\nPlease Enter A Valid Choice\n";
@@ -433,12 +443,18 @@ class menu {
             }
             if (choice == 5) {
                 string deleted;
-                cout << "\nWhich Student Do You Want To Delete: \n";
-                cin >> deleted;
+                if (function.head == NULL) {
+                    cout << "\nThe Database Is Empty\n";
+                    addRemove();
+                }
+                else {
+                    cout << "\nWhich Student Do You Want To Delete: \n";
+                    cin >> deleted;
 
-                cout << "\nStudent Removed Successfully\n";
-                function.deleteNodeName(function.head , function.head2 , deleted);
-                addRemove();
+                    cout << "\nStudent Removed Successfully\n";
+                    function.deleteNodeName(function.head , function.head2 , deleted);
+                    addRemove();
+                }
             }
             if (choice == 6) {
                 function.deleteList(function.head , function.head2);
@@ -456,7 +472,9 @@ class menu {
     // Function for search Menu, -> 0 = Main Menu
     void search() {
         int choice;
-        function.list(function.head , function.head2);
+        if(showList % 2 != 0) {
+            function.list(function.head , function.head2);
+        }
         print.searchMenu();
         cout << "Choice: ";
         cin >> choice;
@@ -472,20 +490,38 @@ class menu {
                 mainMenu();
             }
             if (choice == 1) {
-                string deleted;
+                string searched;
+                if (function.head == NULL) {
+                    cout << "\nThe Database Is Empty\n";
+                    search();
+                }
+                else {
                 cout << "\nWho Do You Want To Search By Name? :";
-                cin >> deleted;
-                function.search(function.head , function.head2 , deleted)
-                ? cout << "\nThe Student " << deleted << " Is In The Database\n" : cout << "\nThe Student " << deleted <<"\n Is Not In The Database\n";
+                cin >> searched;
+                function.search(function.head , function.head2 , searched)
+                ? cout << "\nThe Student " << searched << " Is In The Database\n" : cout << "\nThe Student " << searched <<"\n Is Not In The Database\n";
                 search();
+                }
             }
             if (choice == 2) {
+                if (function.head == NULL) {
+                    cout << "\nThe Database Is Empty\n";
+                    search();
+                }
+                else {
                 cout << "\nThe Youngest Student Is " << function.minName(function.head2 , function.head) << " at " << function.minAge(function.head2) << " Years Old\n";
                 search();
+                }
             }
             if (choice == 3) {
+                if (function.head == NULL) {
+                    cout << "\nThe Database Is Empty\n";
+                    search();
+                }
+                else {
                 cout << "\nThe Oldest Student Is " << function.maxName(function.head2 , function.head) << " at " << function.maxAge(function.head2) << " Years Old\n";
                 search();
+            }
             }
         }
         }
@@ -501,7 +537,5 @@ int main() {
 
     print.header();
     menu.mainMenu();
-
-
 
 }
