@@ -1,537 +1,237 @@
 #include <iostream>
 #include <iomanip>
-#include <limits>
-
+#include <utility>
 using namespace std;
 
-int showList = 0;
-
-// Class to store basic data 
-class Node {
-    public:
+struct Node{
     string name;
     int age;
-    Node *nextName = NULL, *nextAge = NULL;
+    Node *next;
+
+    Node(string n, int a){
+        name = n;
+        age = a;
+        next = nullptr;
+    }
 };
 
-// Class to print
 class print {
     public:
-    // Function to print header
-    void header() {
-        cout << "---------------------------------------\n";                
-        cout << "|\tMMU Student's Database\t      |\n";
-        cout << "---------------------------------------\n";   
+        void welcome() {
+            cout << "---------------------------------------\n";
+            cout << "|\tMMU Student's Database\t      |\n";
+            cout << "---------------------------------------\n";
+        }
+
+
+};
+
+class LinkedList{
+    Node *head;
+    Node *tail;
+    int size;
+
+  public:
+    // Initialize the LinkedList
+    LinkedList(){
+        head = nullptr;
+        tail = nullptr;
+        size = 0;
     }
 
-    // Function to print the main menu
-    void mainMenu() {
-        cout << "\n-------------";
-        cout << "\n| MAIN MENU |\n";
-        cout << "--------------------------------------------------------------------------------\n";
-        cout << "[1] Add / Remove Students From Database\n";
-        cout << "[2] Search Students From Database\n";
-        cout << "[0] Print Current Database\n";
-        cout << endl;
-        cout << "[99] |TOGGLE DEBUG MODE| " ;
-        if (showList % 2 == 0) {
-            cout << "OFF : NOT SHOWING DATABASE\n";
-        }
-        if (showList % 2 != 0) {
-            cout << "ON : SHOWING DATABASE\n";
-        }
-        cout << "--------------------------------------------------------------------------------\n";
+    LinkedList(string name, int age){
+        Node *nNode = new Node(name, age);
+        head = nNode;
+        tail = nNode;
+        size = 1;
     }
 
-    // Function to print add / remove student menu
-    void addRemoveMenu() {
-        cout << "\n-----------------";
-        cout << "\n| DATABASE MENU |\n";
+    // Function to push data to the front of the linked list
+    void push_front(string name, int age){
+        Node *nNode = new Node(name, age);
+        if (head == nullptr)
+        {
+            head = nNode;
+            tail = nNode;
+        }
+        else
+        {
+            nNode->next = head;
+            head = nNode;
+        }
+        size++;
+    }
+    
+    // Function to push data to the front of the linked list
+    void push_back(string name, int age){
+        Node *nNode = new Node(name, age);
+        if (tail == nullptr)
+        {
+            head = nNode;
+            tail = nNode;
+        }
+        else
+        {
+            tail->next = nNode;
+            tail = nNode;
+        }
+        size++;
+    }
+
+    bool search(string name){
+        Node *ptr = head;
+        bool found = false;
+        while (ptr != nullptr){
+            if (ptr->name == name){
+                found = true;
+                break;
+            }
+            ptr = ptr->next;
+        }
+        return found;
+    }
+    int searchName(string name){
+        Node *ptr = head;
+        bool found = false;
+        while (ptr != nullptr){
+            if (ptr->name == name){
+                found = true;
+                break;
+            }
+            ptr = ptr->next;
+        }
+        return ptr->age;
+    }
+
+    void printList(){
+        Node *ptr = head;
+        while (ptr != nullptr){
+            cout << ptr->name << ":" << ptr->age << endl;
+            ptr = ptr->next;
+        }
+    }
+
+    void pop_front(){
+
+    }
+
+    void pop_back(){
+
+    }
+
+    pair<string, int> front(){
+        if (head != nullptr)
+          return make_pair(head->name, head->age);
+        else
+            return make_pair("Empty", 0);
+    }
+
+    pair<string, int> back(){
+        if (tail != nullptr)
+            return make_pair(tail->name, tail->age);
+        else
+            return make_pair("Empty", 0);
+    }
+
+    int getSize(){
+        return size;
+    }
+};
+
+
+class Application{
+    LinkedList a;
+    print p;
+    int menu;
+
+public:
+    Application(){
+        p.welcome();    // Run header message
+        do { editNodes();} while (menu != 77);
+                                // Run function to add nodes
+        a.printList();
+
+        // cout << a.getSize() << " nodes in the list" << endl;
+
+        // searchDemo();
+        // front_back_demo();
+    }
+
+    void getMenu() {
+        cout << "------------------------------------------------------\n";
+        cout << "[00] Print Database\n";
+        cout << "[99] Clear Database\n";
         cout << "------------------------------------------------------\n";
         cout << "[1] Add A Student To The Top Of The Database\n";
         cout << "[2] Add A Student To The Bottom Of The Database\n";
         cout << "[3] Remove A Student From The Top Of The Database\n";
         cout << "[4] Remove A Student From The Bottom Of The Database\n";
         cout << "[5] Remove A Student From The Database By Name\n";
-        cout << "[6] Clear Entire Database\n";
-        cout << "[0] Return Back To Main Menu\n";
+        cout << "[6] Remove A Student From The Database By Age\n";
         cout << "------------------------------------------------------\n";
-    }
-
-    // Function to print search / minMax student menu
-    void searchMenu() {
-        cout << "\n-----------------";
-        cout << "\n|  SEARCH MENU  |\n";
+        cout << "[7] Show Size Of Database \n";
+        cout << "[8] Search For A Student By Name\n";
+        cout << "[9] Search For The Youngest Student\n";
+        cout << "[10] Search For The Oldest Student\n";
         cout << "------------------------------------------------------\n";
-        cout << "[1] Search For A Student By Name\n";
-        cout << "[2] Search For The Youngest Student\n";
-        cout << "[3] Search For The Oldest Student\n";
-        cout << "[0] Return Back To Main Menu\n";
+        cout << "[11] Change To Sorted Linked List With Data\n";
         cout << "------------------------------------------------------\n";
-    }
-
-};
-
-// Class to perform link list insertion / removal
-class function {
-    private:
-    Node node;
-    Node *head = NULL, *head2 = NULL;
-    Node *ptr;
-    Node *next = NULL;
-    friend class menu;
-
-    public:
-    // Function to print show database
-    void showDatabase() {
-        showList++;
-    }
-
-    // Function to set Name Age at the front of link list
-    void setNameAgeFront() {
-        cout << "\nInput Name: " ;
-        cin >> node.name;
-        cout << "Input Age: ";
-        cin >> node.age;
-        cout << "\nStudent Succesfully Added\n";
-        pushFrontName(&head , node.name);
-        pushFrontAge(&head2 , node.age);
-    }
-
-    //Function to set Name Age at the end of link list
-    void setNameAgeEnd() {
-        cout << "\nInput Name: " ;
-        cin >> node.name;
-        cout << "Input Age: ";
-        cin >> node.age;
-        cout << "\nStudent Succesfully Added\n";
-        pushEndName(&head , node.name);
-        pushEndAge(&head2 , node.age);
-    }
-    
-    // Function to push name data into the linked list atthe front
-    void pushFrontName( Node **head , string data) {
-        Node* newNode = new Node();
-        newNode->name = data;
-        newNode->nextName = (*head);
-        (*head) = newNode;
-    }
-
-    // Function to push age data into the linked list at the front
-    void pushFrontAge(Node **head , int data) {
-        Node* newNode = new Node();
-        newNode->age = data;
-        newNode->nextAge = (*head);
-        (*head) = newNode;
-    }
-
-    // Function to push name data into the linked list at the end
-    void pushEndName(Node **head , string data) {
-        Node *newNode = new Node();
-        Node *last = *head;
-        newNode->name = data;
-        newNode->nextName = NULL;
-        if (*head == NULL) {
-            *head = newNode;
-            return;
+        cout << "Enter a value: ";
+        cin >> menu;
         }
-        while (last->nextName != NULL) {
-            last = last->nextName;
-        }
-        last->nextName = newNode;
-        return;
-    }
 
-    // Function to push name data into the linked list at the end
-    void pushEndAge(Node **head , int data) {
-        Node *newNode = new Node();
-        Node *last = *head;
-        newNode->age = data;
-        newNode->nextAge = NULL;
-        if (*head == NULL) {
-            *head = newNode;
-            return;
-        }
-        while (last->nextAge != NULL) {
-            last = last->nextAge;
-        }
-        last->nextAge = newNode;
-        return;
-    }
+    void editNodes(){
+        string name; int age;
+        getMenu();
 
-    // Function to delete the front of the link list
-    void deleteTop() {
-        if (head == NULL) {
-            cout << "\nThe Database Is Empty\n";
+        if ( menu == 1)     // Push data to the front of the list
+        {
+            cout << "\nEnter the name and age of the student.\n";
+            cout << "Name -> ";
+            cin >> name;
+            cout << "Age -> "; 
+             cin >> age;
+            a.push_front(name, age);
+            cout << "\nStudent Successfully Added.\n";
         }
-        if (head != NULL) {
-            head = head->nextName;
-            head2 = head2->nextAge;
-            cout << "\nStudent Removed Successfully\n";
+        else if (menu == 2)  // Push data to the front of the list
+        {
+            cout << "\nEnter the name and age of the student.\n";
+            cout << "Name -> ";
+            cin >> name;
+            cout << "Age -> "; 
+            cin >> age;
+            a.push_back(name, age);
+            cout << "\nStudent Successfully Added.\n";
+        }
+        else if (menu == 00)
+        {
+            a.printList();
         }
     }
-
-    // Function to delete from the bottom (Issue)
-    void deleteBottom(Node*& head , Node *& head2) {
-        Node *t = head;
-        Node *u = head2;
-        
-        if (t == NULL) {
-            cout << "\nThe Database Is Empty\n";
-            t = NULL;
-            u = NULL;
-            return;
-        }
-        if (t->nextName == NULL) {
-            delete(t);
-            delete(u);
-            return;
-	    }
-        else {
-            while (t->nextName->nextName != NULL) {
-                t = t->nextName;
-                u = u->nextAge;
-            }
-            delete (t->nextName);
-            delete (u->nextAge);
-            t->nextName = NULL;
-            u->nextAge = NULL;
-        }
-    }
-
-    // Function to delete by name
-    void deleteNodeName(Node *&head , Node *&head2 , string deleted) {
-            if(head == NULL) {
-                    return;
-                }    
-            if (head->name == deleted) {
-                    Node *t = head;
-                    Node *u = head2;
-                    head = head->nextName;
-                    head2 = head2->nextAge;
-
-                    delete(t);
-                    delete(u);
-                    return;
-                }
-            deleteNodeName(head->nextName , head2->nextAge , deleted); 
-        }
-
-    // Function to delete entire list
-    void deleteList(Node *&head , Node *&head2) {
-        Node *current = head , *current2 = head2;
-        Node *nextName = NULL , *nextAge = NULL;
-
-        while (current != NULL) {
-            nextName = current->nextName;
-            nextAge = current2->nextAge;
-            delete(current);
-            delete(current2);
-            current = nextName;
-            current2 = nextAge;
-        }
-    
-        head = NULL;
-        head2 = NULL;
-
-    }
-    // Function to search if data is in the link list
-    bool search(Node *& head , Node*& head2, string data) {
-        Node* t = head;
-        Node *u = head2;
-        if (t == NULL) {
-            cout << "The Database Is Empty\n";
-        }
-        else {
-            if (t->name == data) {
-                    return true;
-                }
-            else {
-                return false;
-            }
-        }
+    void searchDemo(){
+        cout << boolalpha << a.search("Lynne") << endl;
+        cout <<  a.searchName("afif") << endl;
+        cout << boolalpha << a.search("sharaf") << endl;
 
     }
 
-    // Function to find youngest student's age
-    int minAge(Node *head) {
-        int min = INT_MAX;
-        Node *current = head;
-        if (current == NULL) {
-           cout << "The Database Is Empty\n"; 
-        }
-        else {
-            while (current != NULL) { 
-                if (min > current->age) {
-                    min = current->age;
-                }
-            current = current->nextAge;
-        }
-        return min;
-        }
-    }
+    void front_back_demo(){
+        pair<string, int> front = a.front();
+        if (front.first == "Empty")
+            cout << "List is empty" << endl;
+        else
+            cout << front.first << ":" << front.second << endl;
 
-    // Function to find youngest student's name
-    string minName(Node *head , Node*head2) {
-        int min = INT_MAX;
-        string minName;
-        Node *current = head;
-        Node *current2 = head2;
-            while (current != NULL) { 
-                if (min > current->age) {
-                    min = current->age;
-                    minName = current2->name;
-                }
-            current = current->nextAge;
-            current2 = current2->nextName;
-        }
-        return minName;
-    } 
-
-    // Function to find oldest student's age
-    int maxAge(Node *head) {
-        int max = INT_MIN;
-        Node *current = head;
-        if (current == NULL) {
-           cout << "The Database Is Empty\n"; 
-        }
-        else {
-            while (current != NULL) { 
-                if (max < current->age) {
-                    max = current->age;
-                }
-            current = current->nextAge;
-            }
-        return max;
-        }
-    }
-
-    // Function to find oldest student's name
-    string maxName(Node *head , Node*head2) {
-        int max = INT_MIN;
-        string maxName;
-        Node *current = head;
-        Node *current2 = head2;
-            while (current != NULL) { 
-                if (max < current->age) {
-                    max = current->age;
-                    maxName = current2->name;
-                }
-            current = current->nextAge;
-            current2 = current2->nextName;
-        }
-        return maxName;
-    } 
-	 
-    // Function to print current database
-    void list(Node *node , Node *node2) {
-        if (node == NULL || node2 == NULL) {
-            cout << "\n---------------------------------";
-            cout << "\n|   Current Student Database    |\n";
-            cout << "---------------------------------\n";
-            cout << "|       DATABASE IS EMPTY       |\n";
-            cout << "---------------------------------\n";
-        }
-
-        else {
-            cout << "\n---------------------------------";
-            cout << "\n|   Current Student Database    |\n";
-            cout << "---------------------------------\n";
-                cout << "| "; 
-                cout.width(20);
-                cout << left << "Name" << "| ";
-                cout.width(8);
-                cout << "Age" << "|" << endl;          
-            cout << "---------------------------------\n";
-            while (node != NULL || node2 != NULL) {
-                cout << "| "; 
-                cout.width(20);
-                cout << left << node->name << "| ";
-                cout.width(8);
-                cout << node2->age << "|" << endl;
-                node = node->nextName;
-                node2 = node2->nextAge;
-            }
-            cout << "---------------------------------\n";
-        }
+        pair<string, int> back = a.back();
+        if (back.first == "Empty")
+            cout << "List is empty" << endl;
+        else
+            cout << back.first << ":" << back.second << endl;
     }
 };
 
-// Class menu to dictate where to go
-class menu {
-    private:
-    function function;
-    print print;
-    int run = 0;
-
-    public:
-    // Function for Main Menu, -> 1 = addRemove , 2 = functions
-    void mainMenu() {
-        int choice;
-        print.mainMenu();
-        cout << "Choice: ";
-        cin >> choice;
-        while(1) {
-            if(cin.fail()) {
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(),'\n');
-                cout << "\nPlease Enter A Valid Choice\n";
-                mainMenu();
-            }
-        if (!cin.fail()) {
-            if (choice == 99) {
-                function.showDatabase();
-                mainMenu();
-            }
-            if (choice == 0) {
-                function.list(function.head , function.head2);
-                mainMenu();
-            }
-            if (choice == 1) {
-                addRemove();
-            }
-            if (choice == 2) {
-                search();
-            }
-            else {
-                cout << "\nPlease Enter A Valid Choice\n";
-                mainMenu();
-            }
-        }
-        }
-    }
-
-    // Function for addRemove Menu, -> 0 = Main Menu
-    void addRemove() {
-        int choice;
-        if(showList % 2 != 0) {
-            function.list(function.head , function.head2);
-        }
-        print.addRemoveMenu();
-        cout << "Choice: ";
-        cin >> choice;
-        while(1) {
-            if(cin.fail()) {
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(),'\n');
-                cout << "\nPlease Enter A Valid Choice\n";
-                addRemove();
-            }
-        if (!cin.fail()) {
-            if (choice == 0) {
-                mainMenu();
-            }
-            if (choice == 1) {
-                function.setNameAgeFront();
-                addRemove();
-            }
-            if (choice == 2) {
-                function.setNameAgeEnd();
-                addRemove();
-            }
-            if (choice == 3) {
-                function.deleteTop();
-                addRemove();
-            }
-            if (choice == 4) {
-                function.deleteBottom(function.head , function.head2);
-                addRemove();
-            }
-            if (choice == 5) {
-                string deleted;
-                if (function.head == NULL) {
-                    cout << "\nThe Database Is Empty\n";
-                    addRemove();
-                }
-                else {
-                    cout << "\nWhich Student Do You Want To Delete: \n";
-                    cin >> deleted;
-
-                    cout << "\nStudent Removed Successfully\n";
-                    function.deleteNodeName(function.head , function.head2 , deleted);
-                    addRemove();
-                }
-            }
-            if (choice == 6) {
-                function.deleteList(function.head , function.head2);
-                cout << "\nThe Database Has Been Cleared.\n";
-                addRemove();
-            }
-            else {
-                cout << "\nPlease Enter A Valid Choice\n";
-                addRemove();
-            }
-        }
-        }
-    }
-
-    // Function for search Menu, -> 0 = Main Menu
-    void search() {
-        int choice;
-        if(showList % 2 != 0) {
-            function.list(function.head , function.head2);
-        }
-        print.searchMenu();
-        cout << "Choice: ";
-        cin >> choice;
-        while(1) {
-            if(cin.fail()) {
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(),'\n');
-                cout << "\nPlease Enter A Valid Choice\n";
-                search();
-            }
-        if (!cin.fail()) {
-            if (choice == 0) {
-                mainMenu();
-            }
-            if (choice == 1) {
-                string searched;
-                if (function.head == NULL) {
-                    cout << "\nThe Database Is Empty\n";
-                    search();
-                }
-                else {
-                cout << "\nWho Do You Want To Search By Name? :";
-                cin >> searched;
-                function.search(function.head , function.head2 , searched)
-                ? cout << "\nThe Student " << searched << " Is In The Database\n" : cout << "\nThe Student " << searched <<" Is Not In The Database\n";
-                search();
-                }
-            }
-            if (choice == 2) {
-                if (function.head == NULL) {
-                    cout << "\nThe Database Is Empty\n";
-                    search();
-                }
-                else {
-                cout << "\nThe Youngest Student Is " << function.minName(function.head2 , function.head) << " at " << function.minAge(function.head2) << " Years Old\n";
-                search();
-                }
-            }
-            if (choice == 3) {
-                if (function.head == NULL) {
-                    cout << "\nThe Database Is Empty\n";
-                    search();
-                }
-                else {
-                cout << "\nThe Oldest Student Is " << function.maxName(function.head2 , function.head) << " at " << function.maxAge(function.head2) << " Years Old\n";
-                search();
-            }
-            }
-        }
-        }
-    }
-};
-
-
-
-
-int main() {
-    print print;
-    menu menu;
-
-    print.header();
-    menu.mainMenu();
-
+int main(){
+    Application app;
+    return 0;
 }

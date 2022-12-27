@@ -11,17 +11,17 @@ class Node {
     public:
     string name;
     int age;
-    Node *next;
+    Node *nextName = NULL, *nextAge = NULL;
 };
 
 // Class to print
-class linkedList {
+class print {
     public:
     // Function to print header
     void header() {
-        cout << "---------------------------------------\n";                
+        cout << "---------------------------------------\n";
         cout << "|\tMMU Student's Database\t      |\n";
-        cout << "---------------------------------------\n";   
+        cout << "---------------------------------------\n";
     }
 
     // Function to print the main menu
@@ -73,11 +73,12 @@ class linkedList {
 };
 
 // Class to perform link list insertion / removal
-class function {
+class linkList {
     private:
     Node node;
     Node *head = NULL, *head2 = NULL;
     Node *ptr;
+    Node *next = NULL;
     friend class menu;
 
     public:
@@ -174,6 +175,7 @@ class function {
     void deleteBottom(Node*& head , Node *& head2) {
         Node *t = head;
         Node *u = head2;
+        
         if (t == NULL) {
             cout << "\nThe Database Is Empty\n";
             t = NULL;
@@ -353,7 +355,6 @@ class function {
             cout << "---------------------------------\n";
         }
     }
-
 };
 
 // Class menu to dictate where to go
@@ -391,11 +392,6 @@ class menu {
             }
             if (choice == 2) {
                 search();
-            }
-            if (choice == 3) {
-                function.sort(function.head2);
-                function.list(function.head , function.head2);
-                mainMenu();
             }
             else {
                 cout << "\nPlease Enter A Valid Choice\n";
@@ -499,7 +495,7 @@ class menu {
                 cout << "\nWho Do You Want To Search By Name? :";
                 cin >> searched;
                 function.search(function.head , function.head2 , searched)
-                ? cout << "\nThe Student " << searched << " Is In The Database\n" : cout << "\nThe Student " << searched <<"\n Is Not In The Database\n";
+                ? cout << "\nThe Student " << searched << " Is In The Database\n" : cout << "\nThe Student " << searched <<" Is Not In The Database\n";
                 search();
                 }
             }
