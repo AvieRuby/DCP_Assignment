@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <utility>
+
 using namespace std;
 
 struct Node{
@@ -219,54 +220,97 @@ class LinkedList{
         return found;
     }
 
-/*     string getMax(key){
-        Node *prev = nullptr;
-        Node *current = head;
-        while(current != nullptr)
-        {
-            if (current->age == key)
-            {
-                if (current == head)
-                {
-                    head = head->next;
-                    delete current;
-                    current = head;
-                    cout << "\nStudent Successfully Deleted.\n";
-                }
-                else
-                {
-                    prev->next = current->next;
-                    delete current;
-                    current = prev->next;
-                }
-
-            }
-            else
-            {
-                prev = current;
-                current = current->next;
-                cout << "\nStudent not found\n";
-            }
-        }
-    } */
-
+    // Find Maximum Number
     int findMax(){
-        int max = INT_MAX;
+        int max = INT_MIN;
         Node *ptr = head;
             while (ptr != nullptr)
             {
-                if (max < ptr->age)
+                if (ptr->age > max)
                 {
                     max = ptr->age;
-                    ptr = ptr->next; 
                 }
-
-
+            ptr = ptr->next; 
             }
+        getMax(max);
         return max;
-        //getMax(max);
+
         }
-    
+
+    void getMax(int key){
+        Node *prev = nullptr;
+        Node *current = head;
+        string max = "x";
+        int count = 0;
+
+        cout << "\nThe Oldest Student(s) Is " << key << " Years Old\n";
+        cout << "Student(s) Aged " << key << ": ";
+        while(current != nullptr)
+        {
+            if(current->age == key)
+            {
+                max = current->name;
+                cout << max << " ";
+                current = current->next;
+                count++;
+            }
+            else
+            {
+                break;
+            }
+
+        }
+        cout << "\n\nThere Are A Total Of " << count << " Student(s) Aged " << key;
+        delete current;
+
+    }
+
+
+    // Find Minimum Number
+    int findMin(){
+        int min = INT_MAX;
+        Node *ptr = head;
+            while (ptr != nullptr)
+            {
+                if (ptr->age < min)
+                {
+                    min = ptr->age;
+                }
+            ptr = ptr->next; 
+            }
+        getMin(min);
+        return min;
+
+        }
+
+    void getMin(int key){
+        Node *prev = nullptr;
+        Node *current = head;
+        string min = "x";
+        int count = 0;
+
+        cout << "\nThe Youngest Student(s) Is " << key << " Years Old\n";
+        cout << "Student(s) Aged " << key << ": ";
+        while(current != nullptr)
+        {
+            if(current->age == key)
+            {
+                min = current->name;
+                cout << min << " ";
+                current = current->next;
+                count++;
+            }
+            else
+            {
+                break;
+            }
+
+        }
+        cout << "\n\nThere Are A Total Of " << count << " Student(s) Aged " << key;
+        delete current;
+
+    }
+
 
     // Function to print out my glorious list
     void printList(){
@@ -332,8 +376,8 @@ public:
         cout << "------------------------------------------------------\n";
         cout << "[07] Search For A Student By Name\n";
         cout << "[08] Search For A Student By Age\n";
-        cout << "[09] Search For The Youngest Student\n";
-        cout << "[10] Search For The Oldest Student\n";
+        cout << "[09] Search For The Oldest Student\n";
+        cout << "[10] Search For The Youngest Student\n";
         cout << "------------------------------------------------------\n";
         cout << "[11] Show Size Of Database \n";
         cout << "[12] Clear Database\n";
@@ -440,7 +484,11 @@ public:
         }
         else if (menu == 9)  // Get Max
         {   
-            cout << a.findMax();
+            a.findMax();
+        }
+        else if (menu == 10)  // Get Max
+        {   
+            a.findMin();
         }
         else if (menu == 13)  // Find Size Of List
         {    
