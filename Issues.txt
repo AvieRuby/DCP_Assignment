@@ -1,5 +1,5 @@
-Delete a Linked List node at a given position
+Delete a Linked List node at a given position could be included
 
 Fail saves yet to be added
 
-Add more functionality to search functions to add name/age and number
+Add more functionality to search functions to add name/age and number , implemented but segmentation error at test.cpp

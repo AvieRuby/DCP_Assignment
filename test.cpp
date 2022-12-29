@@ -206,6 +206,33 @@ class LinkedList{
         return found;
     }
 
+    void searchNameAge(string key){
+        Node *prev = nullptr;
+        Node *current = head;
+        int printage , count = 0;
+        string newName = key;
+
+        cout << "\nStudent Named " << newName << " Found At Ages: \n"; 
+        while(current != nullptr)
+        {
+            if(current->name == key)
+            {
+                printage = current->age;
+                cout << printage << " ";
+                current = current->next;
+                count++;
+            }
+            else
+            {
+                break;
+            }
+
+        }
+        cout << "\n\nThe Database Found " << count << " Student(s) Named " << newName;
+        delete current;
+
+    }
+
     // Function to search age 
     bool searchAge(int key){
         Node *ptr = head;
@@ -232,10 +259,38 @@ class LinkedList{
                 }
             ptr = ptr->next; 
             }
+        getMax(max);
         return max;
 
         }
 
+    void getMax(int key){
+        Node *prev = nullptr;
+        Node *current = head;
+        string max = "x";
+        int count = 0;
+
+        cout << "\nThe Oldest Student(s) Is " << key << " Years Old\n";
+        cout << "Student(s) Aged " << key << ": ";
+        while(current != nullptr)
+        {
+            if(current->age == key)
+            {
+                max = current->name;
+                cout << max << " ";
+                current = current->next;
+                count++;
+            }
+            else
+            {
+                break;
+            }
+
+        }
+        cout << "\n\nThere Are A Total Of " << count << " Student(s) Aged " << key;
+        delete current;
+
+    }
 
 
     // Find Minimum Number
@@ -250,9 +305,52 @@ class LinkedList{
                 }
             ptr = ptr->next; 
             }
+        getMin(min);
         return min;
 
         }
+
+    void getMin(int key){
+        Node *prev = nullptr;
+        Node *current = head;
+        string min = "x";
+        int count = 0;
+
+        cout << "\nThe Youngest Student(s) Is " << key << " Years Old\n";
+        cout << "Student(s) Aged " << key << ": ";
+        while(current != nullptr)
+        {
+            if(current->age == key)
+            {
+                min = current->name;
+                cout << min << " ";
+                current = current->next;
+                count++;
+            }
+            else
+            {
+                break;
+            }
+
+        }
+        cout << "\n\nThere Are A Total Of " << count << " Student(s) Aged " << key;
+        delete current;
+
+    }
+
+    // Function to cause havoc
+    void deleteList() {
+        Node *current = head;
+        Node *next = nullptr;
+
+        while (current != nullptr)
+        {
+            next = current->next;
+            delete current;
+            current = next;
+        }
+        head = nullptr;
+    }
 
 
     // Function to print out my glorious list
@@ -403,10 +501,15 @@ public:
             cout << "Name -> ";
             cin >> inputstring;
 
-            a.searchName(inputstring) ? 
-            cout << "\nThe Student " << inputstring << " Is In The Database\n" :
+            if (a.searchName(inputstring) == true)
+            {
+            a.searchNameAge(inputstring);
+            }
+            else
+            {
             cout << "\nThe Student " << inputstring <<" Is Not In The Database\n";
             }
+        }
         }
         else if (menu == 8)  // Search Age
         {   
@@ -427,15 +530,20 @@ public:
         }
         else if (menu == 9)  // Get Max
         {   
-            cout << "\nThe Oldest Student Is " << a.findMax() << " Years Old.";
+            a.findMax();
         }
         else if (menu == 10)  // Get Max
         {   
-            cout << "\nThe Youngest Student Is " << a.findMin() << " Years Old.";
+            a.findMin();
         }
         else if (menu == 11)  // Find Size Of List
         {    
             cout << "\nCurrent Size Of Database Is " << a.getSize() << " Nodes.\n";
+        }
+        else if (menu == 12)  // Find Size Of List
+        {    
+            a.deleteList();
+            cout << "\nList Has Been Destroyed.\n";
         }
 
     }
