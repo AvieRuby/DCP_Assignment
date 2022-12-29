@@ -78,6 +78,35 @@ class LinkedList{
         size++;
     }
 
+    // Function to delete data to the front of the linked list
+    void pop_front(){
+        if (head == nullptr)
+        {
+            cout << "The Database Is Empty";
+        } 
+        else if (head != nullptr)
+        {
+            Node *nNode = head;
+            head = head->next;
+            delete nNode;
+            cout << "\nStudent Successfully Deleted.\n";
+        }   
+    }
+
+    void pop_back(){
+        if (tail == nullptr)
+        {
+            cout << "The Database Is Empty";
+        } 
+        else if (tail != nullptr)
+        {
+            Node *nNode = tail;
+            tail = tail->next;
+            delete nNode;
+            cout << "\nStudent Successfully Deleted.\n";
+        }   
+    }
+
     bool search(string name){
         Node *ptr = head;
         bool found = false;
@@ -105,19 +134,25 @@ class LinkedList{
 
     void printList(){
         Node *ptr = head;
-        while (ptr != nullptr){
-            cout << ptr->name << ":" << ptr->age << endl;
-            ptr = ptr->next;
-        }
+        cout << "\n---------------------------------";
+        cout << "\n|        Current Database       |\n";
+        cout << "---------------------------------\n";
+                cout << "| "; 
+                cout.width(20);
+                cout << left << "Name" << "| ";
+                cout.width(8);
+                cout << "Age" << "|" << endl;          
+            cout << "---------------------------------\n";
+            while (ptr != nullptr) {
+                cout << "| "; 
+                cout.width(20);
+                cout << left << ptr->name << "| ";
+                cout.width(8);
+                cout << ptr->age << "|" << endl;
+                ptr = ptr->next;
+            }
     }
 
-    void pop_front(){
-
-    }
-
-    void pop_back(){
-
-    }
 
     pair<string, int> front(){
         if (head != nullptr)
@@ -147,7 +182,7 @@ class Application{
 public:
     Application(){
         p.welcome();    // Run header message
-        do { editNodes();} while (menu != 77);
+        do { editNodes();} while (menu != 11);
                                 // Run function to add nodes
         a.printList();
 
@@ -160,7 +195,8 @@ public:
     void getMenu() {
         cout << "------------------------------------------------------\n";
         cout << "[00] Print Database\n";
-        cout << "[99] Clear Database\n";
+        cout << "[01] Clear Database\n";
+        cout << "[02] Move To Sorted Linked List With Data\n";
         cout << "------------------------------------------------------\n";
         cout << "[1] Add A Student To The Top Of The Database\n";
         cout << "[2] Add A Student To The Bottom Of The Database\n";
@@ -171,10 +207,9 @@ public:
         cout << "------------------------------------------------------\n";
         cout << "[7] Show Size Of Database \n";
         cout << "[8] Search For A Student By Name\n";
-        cout << "[9] Search For The Youngest Student\n";
-        cout << "[10] Search For The Oldest Student\n";
-        cout << "------------------------------------------------------\n";
-        cout << "[11] Change To Sorted Linked List With Data\n";
+        cout << "[9] Search For A Student By Age\n";
+        cout << "[10] Search For The Youngest Student\n";
+        cout << "[11] Search For The Oldest Student\n";
         cout << "------------------------------------------------------\n";
         cout << "Enter a value: ";
         cin >> menu;
@@ -183,32 +218,43 @@ public:
     void editNodes(){
         string name; int age;
         getMenu();
+        
+        if (menu == 00)
+        {
+            a.printList();
+        }
 
-        if ( menu == 1)     // Push data to the front of the list
+        else if (menu == 1)     // Push data to the front of the list
         {
             cout << "\nEnter the name and age of the student.\n";
             cout << "Name -> ";
             cin >> name;
-            cout << "Age -> "; 
+            cout << "Age  -> "; 
              cin >> age;
             a.push_front(name, age);
             cout << "\nStudent Successfully Added.\n";
         }
-        else if (menu == 2)  // Push data to the front of the list
+        else if (menu == 2)  // Push data to the end of the list
         {
             cout << "\nEnter the name and age of the student.\n";
             cout << "Name -> ";
             cin >> name;
-            cout << "Age -> "; 
+            cout << "Age  -> "; 
             cin >> age;
             a.push_back(name, age);
             cout << "\nStudent Successfully Added.\n";
         }
-        else if (menu == 00)
+        else if (menu == 3)  // Delete data at the front of the list
         {
-            a.printList();
+            a.pop_front();
         }
+        else if (menu == 4)  // Delete data at the back of the list
+        {
+            a.pop_back();
+        }
+
     }
+
     void searchDemo(){
         cout << boolalpha << a.search("Lynne") << endl;
         cout <<  a.searchName("afif") << endl;
