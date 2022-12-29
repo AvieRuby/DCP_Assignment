@@ -46,7 +46,10 @@ class LinkedList{
         size = 1;
     }
 
-    // Function to push data to the front of the linked list
+    void *getHead() {
+        return head;
+    }
+    // Function to push data to the front
     void push_front(string name, int age){
         Node *nNode = new Node(name, age);
         if (head == nullptr)
@@ -62,7 +65,7 @@ class LinkedList{
         size++;
     }
     
-    // Function to push data to the front of the linked list
+    // Function to push data to the front
     void push_back(string name, int age){
         Node *nNode = new Node(name, age);
         if (tail == nullptr)
@@ -78,7 +81,7 @@ class LinkedList{
         size++;
     }
 
-    // Function to delete data to the front of the linked list
+    // Function to delete data at the front
     void pop_front(){
         if (head == nullptr)
         {
@@ -93,25 +96,107 @@ class LinkedList{
         }   
     }
 
+    // Function to delete data at the end
     void pop_back(){
-        if (tail == nullptr)
+        if (head == nullptr)
         {
             cout << "The Database Is Empty";
         } 
-        else if (tail != nullptr)
+        else if (head->next == nullptr)
         {
-            Node *nNode = tail;
-            tail = tail->next;
-            delete nNode;
-            cout << "\nStudent Successfully Deleted.\n";
-        }   
+            head = nullptr;
+        }
+        else
+        {
+            Node *nNode = head;
+            while (head->next->next != nullptr)
+            {
+                head = head->next;
+                delete nNode;
+                cout << "\nStudent Successfully Deleted.\n";
+            }
+        head->next = nullptr;
+        }
+           
     }
 
-    bool search(string name){
+    // Function to delete data by key name
+    void pop_name(string key) {
+        Node *prev = nullptr;
+        Node *current = head;
+        while(current != nullptr)
+        {
+            if (current->name == key)
+            {
+                if (current == head)
+                {
+                    head = head->next;
+                    delete current;
+                    current = head;
+                    cout << "\nStudent Successfully Deleted.\n";
+                }
+                else
+                {
+                    prev->next = current->next;
+                    delete current;
+                    current = prev->next;
+                }
+
+            }
+            else
+            {
+                prev = current;
+                current = current->next;
+                cout << "\nStudent not found\n";
+            }
+        }
+        
+    }
+    
+    // Function to delete data by key age
+    void pop_age(int key) {
+        Node *prev = nullptr;
+        Node *current = head;
+        while(current != nullptr)
+        {
+            if (current->age == key)
+            {
+                if (current == head)
+                {
+                    head = head->next;
+                    delete current;
+                    current = head;
+                    cout << "\nStudent Successfully Deleted.\n";
+                }
+                else
+                {
+                    prev->next = current->next;
+                    delete current;
+                    current = prev->next;
+                }
+
+            }
+            else
+            {
+                prev = current;
+                current = current->next;
+                cout << "\nStudent not found\n";
+            }
+        }
+        
+    }
+
+    // Function to get size
+    int getSize(){
+        return size;
+    }
+
+    // Function to search name 
+    bool searchName(string key){
         Node *ptr = head;
         bool found = false;
         while (ptr != nullptr){
-            if (ptr->name == name){
+            if (ptr->name == key){
                 found = true;
                 break;
             }
@@ -119,58 +204,108 @@ class LinkedList{
         }
         return found;
     }
-    int searchName(string name){
+
+    // Function to search age 
+    bool searchAge(int key){
         Node *ptr = head;
         bool found = false;
         while (ptr != nullptr){
-            if (ptr->name == name){
+            if (ptr->age == key){
                 found = true;
                 break;
             }
             ptr = ptr->next;
         }
-        return ptr->age;
+        return found;
     }
 
+/*     string getMax(key){
+        Node *prev = nullptr;
+        Node *current = head;
+        while(current != nullptr)
+        {
+            if (current->age == key)
+            {
+                if (current == head)
+                {
+                    head = head->next;
+                    delete current;
+                    current = head;
+                    cout << "\nStudent Successfully Deleted.\n";
+                }
+                else
+                {
+                    prev->next = current->next;
+                    delete current;
+                    current = prev->next;
+                }
+
+            }
+            else
+            {
+                prev = current;
+                current = current->next;
+                cout << "\nStudent not found\n";
+            }
+        }
+    } */
+
+    int findMax(){
+        int max = INT_MAX;
+        Node *ptr = head;
+            while (ptr != nullptr)
+            {
+                if (max < ptr->age)
+                {
+                    max = ptr->age;
+                    ptr = ptr->next; 
+                }
+
+
+            }
+        return max;
+        //getMax(max);
+        }
+    
+
+    // Function to print out my glorious list
     void printList(){
         Node *ptr = head;
-        cout << "\n---------------------------------";
-        cout << "\n|        Current Database       |\n";
-        cout << "---------------------------------\n";
-                cout << "| "; 
-                cout.width(20);
-                cout << left << "Name" << "| ";
-                cout.width(8);
-                cout << "Age" << "|" << endl;          
+        if (head == nullptr)
+        {
+            cout << "\n---------------------------------";
+            cout << "\n|        Current Database       |\n";
             cout << "---------------------------------\n";
-            while (ptr != nullptr) {
-                cout << "| "; 
-                cout.width(20);
-                cout << left << ptr->name << "| ";
-                cout.width(8);
-                cout << ptr->age << "|" << endl;
-                ptr = ptr->next;
-            }
-    }
-
-
-    pair<string, int> front(){
-        if (head != nullptr)
-          return make_pair(head->name, head->age);
+            cout << "|       DATABASE IS EMPTY       |\n";
+            cout << "---------------------------------\n";
+        }
         else
-            return make_pair("Empty", 0);
+        {
+            cout << "\n---------------------------------";
+            cout << "\n|        Current Database       |\n";
+            cout << "---------------------------------\n";
+                    cout << "| "; 
+                    cout.width(20);
+                    cout << left << "Name" << "| ";
+                    cout.width(8);
+                    cout << "Age" << "|" << endl;          
+                cout << "---------------------------------\n";
+                while (ptr != nullptr) {
+                    cout << "| "; 
+                    cout.width(20);
+                    cout << left << ptr->name << "| ";
+                    cout.width(8);
+                    cout << ptr->age << "|" << endl;
+                    ptr = ptr->next;
+                }
+            cout << "---------------------------------\n";
+        }
     }
 
-    pair<string, int> back(){
-        if (tail != nullptr)
-            return make_pair(tail->name, tail->age);
-        else
-            return make_pair("Empty", 0);
-    }
 
-    int getSize(){
-        return size;
-    }
+
+
+
 };
 
 
@@ -182,55 +317,44 @@ class Application{
 public:
     Application(){
         p.welcome();    // Run header message
-        do { editNodes();} while (menu != 11);
-                                // Run function to add nodes
-        a.printList();
-
-        // cout << a.getSize() << " nodes in the list" << endl;
-
-        // searchDemo();
-        // front_back_demo();
+        do { editNodes();} while (menu != 11); // Run function to add nodes                         
     }
 
     void getMenu() {
+        a.printList(); 
         cout << "------------------------------------------------------\n";
-        cout << "[00] Print Database\n";
-        cout << "[01] Clear Database\n";
-        cout << "[02] Move To Sorted Linked List With Data\n";
+        cout << "[01] Add A Student To The Top Of The Database\n";
+        cout << "[02] Add A Student To The Bottom Of The Database\n";
+        cout << "[03] Remove A Student From The Top Of The Database\n";
+        cout << "[04] Remove A Student From The Bottom Of The Database\n";
+        cout << "[05] Remove A Student From The Database By Name\n";
+        cout << "[06] Remove A Student From The Database By Age\n";
         cout << "------------------------------------------------------\n";
-        cout << "[1] Add A Student To The Top Of The Database\n";
-        cout << "[2] Add A Student To The Bottom Of The Database\n";
-        cout << "[3] Remove A Student From The Top Of The Database\n";
-        cout << "[4] Remove A Student From The Bottom Of The Database\n";
-        cout << "[5] Remove A Student From The Database By Name\n";
-        cout << "[6] Remove A Student From The Database By Age\n";
+        cout << "[07] Search For A Student By Name\n";
+        cout << "[08] Search For A Student By Age\n";
+        cout << "[09] Search For The Youngest Student\n";
+        cout << "[10] Search For The Oldest Student\n";
         cout << "------------------------------------------------------\n";
-        cout << "[7] Show Size Of Database \n";
-        cout << "[8] Search For A Student By Name\n";
-        cout << "[9] Search For A Student By Age\n";
-        cout << "[10] Search For The Youngest Student\n";
-        cout << "[11] Search For The Oldest Student\n";
+        cout << "[11] Show Size Of Database \n";
+        cout << "[12] Clear Database\n";
+        cout << "[13] Transfer Data To Sorted Linked List\n";
         cout << "------------------------------------------------------\n";
         cout << "Enter a value: ";
         cin >> menu;
         }
 
     void editNodes(){
-        string name; int age;
+        string name , inputstring; 
+        int age , inputint;
         getMenu();
         
-        if (menu == 00)
-        {
-            a.printList();
-        }
-
-        else if (menu == 1)     // Push data to the front of the list
+        if (menu == 1)     // Push data to the front of the list
         {
             cout << "\nEnter the name and age of the student.\n";
             cout << "Name -> ";
             cin >> name;
             cout << "Age  -> "; 
-             cin >> age;
+            cin >> age;
             a.push_front(name, age);
             cout << "\nStudent Successfully Added.\n";
         }
@@ -252,29 +376,80 @@ public:
         {
             a.pop_back();
         }
+        else if (menu == 5)  // Delete data by name
+        {
+            if (a.getHead() == nullptr)
+            {
+                cout << "\nThe Database Is Empty\n";
+            }
+            else
+            {
+            cout << "\nEnter the name of the student you want to delete.\n";
+            cout << "Name -> ";
+            cin >> inputstring;
+            a.pop_name(inputstring);
+            }
+        }
+        else if (menu == 6)  // Delete data by age
+        {
+            if (a.getHead() == nullptr)
+            {
+                cout << "\nThe Database Is Empty\n";
+            }
+            else
+            {
+            cout << "\nEnter the age of students you want to delete.\n";
+            cout << "Age -> ";
+            cin >> inputint;
+            a.pop_age(inputint);
+            }
+        }
+        else if (menu == 7)  // Search Name
+        {   
+            if (a.getHead() == nullptr)
+            {
+                cout << "\nThe Database Is Empty\n";
+            }
+            else
+            {
+            cout << "\nEnter the name of the student you want to search.\n";
+            cout << "Name -> ";
+            cin >> inputstring;
+
+            a.searchName(inputstring) ? 
+            cout << "\nThe Student " << inputstring << " Is In The Database\n" :
+            cout << "\nThe Student " << inputstring <<" Is Not In The Database\n";
+            }
+        }
+        else if (menu == 8)  // Search Age
+        {   
+            if (a.getHead() == nullptr)
+            {
+                cout << "\nThe Database Is Empty\n";
+            }
+            else
+            {
+            cout << "\nEnter the age of the student you want to search.\n";
+            cout << "Age -> ";
+            cin >> inputint;
+
+            a.searchAge(inputint) ? 
+            cout << "\nThere Are Students Aged " << inputint << " In The Database\n" :
+            cout << "\nThere Are No Students Aged " << inputint << " In The Database\n";
+            }
+        }
+        else if (menu == 9)  // Get Max
+        {   
+            cout << a.findMax();
+        }
+        else if (menu == 13)  // Find Size Of List
+        {    
+            cout << "\nCurrent Size Of Database Is " << a.getSize() << " Nodes.\n";
+        }
 
     }
 
-    void searchDemo(){
-        cout << boolalpha << a.search("Lynne") << endl;
-        cout <<  a.searchName("afif") << endl;
-        cout << boolalpha << a.search("sharaf") << endl;
 
-    }
-
-    void front_back_demo(){
-        pair<string, int> front = a.front();
-        if (front.first == "Empty")
-            cout << "List is empty" << endl;
-        else
-            cout << front.first << ":" << front.second << endl;
-
-        pair<string, int> back = a.back();
-        if (back.first == "Empty")
-            cout << "List is empty" << endl;
-        else
-            cout << back.first << ":" << back.second << endl;
-    }
 };
 
 int main(){
