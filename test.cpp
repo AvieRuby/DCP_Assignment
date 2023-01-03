@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <utility>
 #include <string>
+#include <climits>
 
 using namespace std;
 
@@ -459,6 +460,8 @@ class sortedLinkedList{
     
 };
 
+class stack
+
 
 
 
@@ -640,6 +643,7 @@ public:
         }
         else if (menu == 99)  // Sort the linked list
         {   
+            a.deleteList();
             constructSortedLinkedList();
             sortedMenu();
         }
@@ -653,7 +657,7 @@ public:
     void constructSortedLinkedList() {
         cout << "\n~~~ Sorted Linked List Constructed ~~~\n\n";
         cout << "---------------------------------------\n";
-        cout << "|\tSorting Test Scores            |\n";
+        cout << "|\tSorting Exam Test Scores      |\n";
         cout << "---------------------------------------\n";
         }
 
@@ -680,7 +684,7 @@ public:
         if (menu == 1)      // Add data to be sorted
         {
             int count;
-            cout << "How Many Data Do You Want To Add?\n";
+            cout << "\nHow Many Data Do You Want To Add?\n";
             cin >> count;
             cout << "\nEnter the Subject And Marks To Sort.\n";
             for (int i = 0; i < count; i++){
@@ -699,7 +703,7 @@ public:
         {
              if (s.getHead() == nullptr)
                 {
-                    cout << "\nThe Database Is Empty\n";
+                    cout << "\nThe Scoresheet Is Empty\n";
                 }
             else
                 {
@@ -715,7 +719,7 @@ public:
         {
             if (s.getHead() == nullptr)
                 {
-                    cout << "\nThe Database Is Empty\n";
+                    cout << "\nThe Scoresheet Is Empty\n";
                 }
                 else
                 {
@@ -729,7 +733,6 @@ public:
         }
     
     }
-    
 
 
 };

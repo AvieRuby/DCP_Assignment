@@ -11,10 +11,18 @@ struct Node{
     int age;
     Node *next;
 
+    int data;
+    Node *link;
+
     Node(string n, int a){
         name = n;
         age = a;
         next = nullptr;
+    }
+
+    Node(int x){
+        this->data = x;
+        this->link = nullptr;
     }
 };
 
@@ -460,19 +468,152 @@ class sortedLinkedList{
     
 };
 
+class stack{
+    Node* top;
+
+  public:
+    stack() {top = nullptr;}
+
+    // Push data into stack
+    void push(int data) {
+        Node *temp = new Node(data);
+
+        if (!temp) {
+            cout << "\nStack Overflow";
+        }
+
+        temp->data = data;
+        temp->link = top;
+        top = temp;
+    }
+
+    // Check stack is empty or not
+    bool isEmpty() {
+        return top == nullptr;
+    }
+
+    // Return top element of the stack
+    int peek(){
+        if (!isEmpty())
+        {
+            return top->data;
+        }
+        else
+        {
+            cout << "\n------------------\n";
+            cout << "~ Stack Is Empty ~";
+            cout << "\n------------------\n";
+
+        }
+    }
+
+    void pop(){
+        Node *temp;
+
+        if (top == nullptr)
+        {
+            cout << "\n------------------\n";
+            cout << "~ Stack Is Empty ~";
+            cout << "\n------------------\n";
+        }
+        else
+        {
+            temp = top;
+            top = top->link;
+            delete temp;
+        }
+    }
+
+    void display(){
+        Node *temp;
+
+        if (top == nullptr)
+        {
+            cout << "\n------------------\n";
+            cout << "~ Stack Is Empty ~";
+            cout << "\n------------------\n";
+        }
+        else
+        {
+            temp = top;
+            cout << "\n-------------";
+            cout << "\n| Stack     |\n";
+            cout << "-------------\n";      
+            while (temp != nullptr) {
+                cout << left << "| "; 
+                cout.width(10);
+                cout << temp->data << "|" << endl;
+                temp = temp->link;
+            }
+        cout << "-------------\n";
+        }
+
+
+    }
+
+
+};
+
+class BST {
+    int data;
+    BST *left, *right;
+
+  public:
+    BST();
+    BST(int);
+    BST* insert(BST* , int);
+    void inOrder(BST*);
+
+
+};
+
+BST :: BST() : data(0) , left(nullptr) , right(nullptr){}
+
+BST :: BST(int value){ data = value; left = right = nullptr;}
+
+BST * BST :: insert(BST* root , int value) {
+    if (!root) 
+    {
+        return new BST(value);
+    }
+
+    if(value > root->data) 
+    {
+        root->right = insert(root->right , value);
+    }
+
+    else if (value < root->data)
+    {
+        root->left = insert(root->left , value);
+    }
+
+    return root;
+}
+
+void BST :: inOrder(BST * root) {
+    if (!root)
+    {
+        return;
+    }
+    inOrder(root->left);
+    cout << root->data << " ";
+    inOrder(root->right);
+}
 
 
 
 class Application{
     LinkedList a;
     sortedLinkedList s;
+    stack z;
+    BST b , *root = nullptr;
     int menu;
 
 public:
     Application(){
         
         constructLinkedList();    // Run header message
-        editNodes(); // Run function to add nodes                 
+        listMenu();                 
     }
 
     void constructLinkedList() {
@@ -507,12 +648,12 @@ public:
         cout << "--------------------------------------------------------\n";
         cout << "Enter a value: ";
         cin >> menu;
+        editNodes();
         }
 
     void editNodes(){
         string name , inputstring; 
         int age , inputint;
-        listMenu();
         
         if (menu == 1)     // Push data to the front of the list
         {
@@ -667,7 +808,7 @@ public:
         cout << "[02] Delete Data by Subject Name                       |\n";
         cout << "[03] Delete Data by Marks                              |\n";
         cout << "--------------------------------------------------------\n";
-        cout << "[99] Procede To Sorted Linked List                     |\n";
+        cout << "[99] Procede To Linked Stack                           |\n";
         cout << "--------------------------------------------------------\n";
         cout << "Enter a value: ";
         cin >> menu;
@@ -728,9 +869,121 @@ public:
                 }
             sortedMenu();
         }
+
+        else if (menu == 99)
+        {
+            constructStack();
+            stackMenu();
+        }
+
+        else
+        {
+            cout << "\nPlease Enter A Valid Input :(\n";
+            sortedMenu();
+        }
     
     }
 
+    void constructStack() {
+        cout << "\n~~~ Linked Stack Contructed ~~~\n\n";
+        cout << "-------------------------\n";
+        cout << "|    The Great Stack    |\n";
+        cout << "-------------------------\n";
+        }
+
+    void stackMenu() {
+        z.display();
+        cout << "\n--------------------------------------------------------\n";
+        cout << "| Linked Stack Menu                                    |\n";
+        cout << "--------------------------------------------------------\n";
+        cout << "[01] Add Number To The Stack                           |\n";
+        cout << "[02] Delete Top Of The Stack                           |\n";
+        cout << "--------------------------------------------------------\n";
+        cout << "[99] Procede To Binary Search Tree                     |\n";
+        cout << "--------------------------------------------------------\n";
+        cout << "Enter a value: ";
+        cin >> menu;
+        editStack();
+        }
+
+    void editStack(){
+        int input;
+
+        if (menu == 1) 
+        {
+            cout << "\nPlease Enter Number To Stack :";
+            cin >> input;
+            z.push(input);
+            stackMenu();
+        }
+
+        else if (menu == 2) 
+        {
+            z.pop();
+            stackMenu();
+        }
+
+        else if (menu == 99) 
+        {
+            constructBST();
+            BSTMenu();
+        }
+
+        else
+        {
+            cout << "\nPlease Enter A Valid Input :(\n";
+            stackMenu();
+        }
+    }
+
+
+void constructBST() {
+        cout << "\n~~~ Binary Search Tree Contructed ~~~\n\n";
+        cout << "---------------------------\n";
+        cout << "|    Binary Search Tree    |\n";
+        cout << "---------------------------\n";
+        }
+
+    void BSTMenu() {
+        cout << "\n--------------------------------------------------------\n";
+        cout << "| Binary Search Tree Menu                              |\n";
+        cout << "--------------------------------------------------------\n";
+        cout << "[01] Add x Numbers To The Tree                         |\n";
+        cout << "[02] Sort And Print                                    |\n";
+        cout << "--------------------------------------------------------\n";
+        cout << "[00] End The Program                                   |\n";
+        cout << "--------------------------------------------------------\n";
+        cout << "Enter a value: ";
+        cin >> menu;
+        editBTS();
+        }
+    
+    void editBTS() {
+        int input , count;
+        
+        if (menu == 1) 
+        {
+            cout << "\nHow many numbers would you like to add?: ";
+            cin >> count;
+            cout << "\nPlease Enter Number(s) \n";
+            for (int i = 0; i < count ; i++)
+            {
+                cout << "-> ";
+                cin >> input;
+                root = b.insert(root , input);
+            }
+            BSTMenu();
+        }
+
+        else if (menu == 2) 
+        {
+            cout << "Data In Order Is:\n";
+            b.inOrder(root);
+            cout << endl;
+            BSTMenu();
+        }
+
+    }
 
 };
 
